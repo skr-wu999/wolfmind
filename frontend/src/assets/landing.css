@@ -78,7 +78,7 @@
 .landing .pixel-dialog .start-button { --face: var(--ember); --hi: var(--ember-hi); --lo: var(--ember-lo); color: #fff8ec; }
 .landing .px-button-primary:hover,
 .landing .pixel-dialog .start-button:hover { --face: #c75532; }
-.landing .px-button:active,
+.landing .px-button:active:not(:disabled),
 .landing .pixel-dialog .start-button:active:not(:disabled),
 .landing .pixel-dialog .secondary-button:active:not(:disabled) {
   transform: translateY(var(--px));
@@ -89,6 +89,7 @@
     var(--px) 0 0 0 var(--ink),
     inset var(--px) var(--px) 0 0 var(--lo);
 }
+.landing .px-button:disabled { --face: #e6dbc1; --hi: #f1e9d6; --lo: #cdbd99; color: #8a7d6c; cursor: default; }
 .landing .px-button:focus-visible,
 .landing .pixel-dialog button:focus-visible,
 .landing .pixel-dialog input:focus-visible,

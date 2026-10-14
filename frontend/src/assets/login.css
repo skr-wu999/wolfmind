@@ -67,9 +67,6 @@
 }
 .login-error::before { content: '!'; font: 600 .875rem/1.2 'Pixelify Sans', monospace; }
 .landing .login-submit { width: 100%; margin-top: 24px; }
-.landing .px-button:disabled { --face: #e6dbc1; --hi: #f1e9d6; --lo: #cdbd99; color: #8a7d6c; cursor: default; }
-.landing .px-button:disabled:active { transform: none; }
-
 .login-signed-in { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 16px 0 0; color: var(--muted); font-size: .8125rem; }
 .login-signed-in button { min-height: 44px; padding: 0; border: 0; background: none; color: var(--ink); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .login-back {

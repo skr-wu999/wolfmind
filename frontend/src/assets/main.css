@@ -5,6 +5,7 @@
 @import './landing.css' layer(components);
 @import './lobby.css' layer(components);
 @import './login.css' layer(components);
+@import './lobby-landing.css' layer(components);
 @import './waiting-room.css' layer(components);
 @import './game.css' layer(components);
 @import './observation.css' layer(components);
