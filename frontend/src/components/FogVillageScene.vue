@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { createFogVillage, fitViewport } from '@/features/home/fogVillage'
 import type { FogVillageRenderer } from '@/features/home/fogVillage'
 import { useHomeDemoStore } from '@/stores/homeDemo'
 
+const props = defineProps<{ controlledPhase?: 'day' | 'night'; hideActors?: boolean }>()
 const emit = defineEmits<{ phaseChanged: [] }>()
 const demo = useHomeDemoStore()
 const { phase, elapsed, paused } = storeToRefs(demo)
@@ -18,6 +19,8 @@ let frame = 0
 let previous: number | undefined
 let lastPaint = 0
 let sceneTime = 0
+let controlledTime = 0
+watch(() => props.controlledPhase, () => { controlledTime = 0 })
 
 function fit() {
   if (!scene.value || !renderer) return
@@ -34,12 +37,17 @@ function fit() {
 function tick(now: number) {
   const dt = previous === undefined ? 0 : Math.min(0.25, (now - previous) / 1000)
   previous = now
-  if (!paused.value) {
+  if (props.controlledPhase) {
+    if (!paused.value) { sceneTime += dt; controlledTime += dt }
+  } else if (!paused.value) {
     sceneTime += dt
     if (demo.advance(dt)) emit('phaseChanged')
   }
   if (renderer && now - lastPaint >= 1000 / 30) {
-    renderer.render({ time: sceneTime, phase: phase.value, phaseTime: elapsed.value, now })
+    const shown = props.controlledPhase
+      ? { phase: props.controlledPhase, phaseTime: controlledTime }
+      : { phase: phase.value, phaseTime: elapsed.value }
+    renderer.render({ time: sceneTime, ...shown, now, actors: !props.hideActors })
     lastPaint = now
   }
   frame = requestAnimationFrame(tick)

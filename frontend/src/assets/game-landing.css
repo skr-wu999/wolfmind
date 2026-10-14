@@ -1,0 +1,237 @@
+/* 核心游戏页沿用首页 .landing 令牌；只换皮肤。座位坐标、手机端分栏与固定技能栏仍由 game.css / game-chat.css 负责，GameTable 在观战、实验室、分析页的样式不受影响。 */
+.landing.game-page { display: flex; flex-direction: column; min-height: 100svh; }
+.landing.game-page .fog-scene { position: fixed; }
+.landing.game-page .game-main { flex: 1; width: min(1520px, calc(100% - 64px)); margin: 0 auto 24px; }
+
+.landing.game-page .px-button:is(.lobby-button, .secondary-button),
+.landing.game-page .px-button:is(.lobby-button, .secondary-button):hover:not(:disabled),
+.landing.game-page .px-button:is(.lobby-button, .secondary-button):disabled { background: var(--face); }
+.landing.game-page .px-button:disabled {
+  color: #8a7d6c;
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--ink),
+    0 calc(2 * var(--px)) 0 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    inset var(--px) var(--px) 0 0 var(--hi),
+    inset calc(-1 * var(--px)) calc(-1 * var(--px)) 0 0 var(--lo);
+}
+.landing.game-page :is(textarea, select, input):focus-visible { outline: var(--px) dashed var(--ember); outline-offset: var(--px); }
+
+/* 顶栏：房间名 + 阶段 + 计时 */
+.landing.game-page .game-topline { gap: 22px; padding: 14px 18px; margin-bottom: 18px; }
+.landing.game-page .game-room-sign { color: var(--ink); }
+.landing.game-page .game-room-sign h1 { margin: 0 0 6px; font-size: 1.375rem; font-weight: 800; letter-spacing: .04em; }
+.landing.game-page .game-room-sign p { color: var(--muted); font-size: .6875rem; line-height: 1.6; }
+.landing.game-page .game-phase-header { border-left: 0; box-shadow: inset var(--px) 0 0 0 #e2d4b0; }
+.landing.game-page .game-phase-header h2 { color: var(--ink); font-weight: 800; letter-spacing: .04em; }
+.landing.game-page .game-phase-header h2 svg { color: var(--ember); }
+.landing.game-page .game-phase-header p { color: var(--muted); }
+.landing.game-page .game-timer {
+  padding: 9px 11px;
+  border: 0;
+  background: var(--paper-hi);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink);
+}
+.landing.game-page .game-timer > span { color: var(--muted); font-weight: 700; }
+.landing.game-page .game-timer strong { color: var(--ember-lo); font: 600 1.25rem/1 'Pixelify Sans', monospace; }
+.landing.game-page .game-timer progress { height: 9px; background: #e2d4b0; }
+.landing.game-page .game-timer progress::-webkit-progress-bar { background: #e2d4b0; }
+.landing.game-page .game-timer progress::-webkit-progress-value { background: var(--ember); }
+.landing.game-page .game-timer progress::-moz-progress-bar { background: var(--ember); }
+
+/* 演示工具、连接与反馈条 */
+.landing.game-page :is(.game-demo-tools, .game-connection, .game-error, .game-feedback, .game-mobile-tabs) {
+  border: 0;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 calc(3 * var(--px)) 0 0 #0a0c1447;
+}
+.landing.game-page .game-demo-tools { margin-bottom: 18px; padding: 4px 12px; font-size: .75rem; }
+.landing.game-page .game-demo-tools summary { font-weight: 700; }
+.landing.game-page .game-demo-tools select { border: 0; color: var(--ink); background: var(--paper-hi); box-shadow: inset 0 0 0 2px var(--paper-lo); }
+.landing.game-page .demo-network { border: 0; color: var(--ink); background: var(--paper-hi); box-shadow: inset 0 0 0 2px var(--ink); font-weight: 700; }
+.landing.game-page :is(.game-connection, .game-error) { margin-bottom: 18px; }
+.landing.game-page .game-connection svg { color: var(--ember); }
+.landing.game-page .game-error { color: var(--ember-lo); font-weight: 600; background: #fbeee0; }
+.landing.game-page .game-feedback { margin-top: 18px; color: #2f5a35; font-weight: 600; background: #eef3e2; }
+.landing.game-page .game-mobile-tabs { gap: 0; margin-bottom: 18px; padding: var(--px); }
+.landing.game-page .game-mobile-tabs button { color: var(--ink); font-weight: 700; }
+.landing.game-page .game-mobile-tabs [aria-selected=true] { color: var(--paper); background: var(--ink); }
+
+.landing.game-page :is(.game-loading, .game-unavailable) h2 { color: var(--ink); font-weight: 800; }
+.landing.game-page .game-unavailable p { color: var(--muted); }
+.landing.game-page .game-unavailable .px-button { margin: 8px 8px 0 0; }
+.landing.game-page .game-skeleton-seats span { border: 0; color: var(--muted); background: var(--paper-hi); box-shadow: inset 0 0 0 2px #cdbd99; }
+
+/* 游戏桌 */
+.landing.game-page .game-layout { gap: 18px; }
+.landing.game-page .game-left { gap: 18px; }
+.landing.game-page .game-table-panel { padding: 14px 16px 10px; }
+.landing.game-page .game-table-heading h2 { color: var(--ink); font-size: 1.125rem; font-weight: 800; letter-spacing: .04em; }
+.landing.game-page .game-table-heading span { color: var(--muted); }
+.landing.game-page .game-table { border: 0; box-shadow: 0 0 0 var(--px) var(--ink); }
+.landing.game-page .table-footnote { margin-top: 10px; color: var(--muted); }
+
+.landing.game-page .game-seat {
+  --seat-line: var(--ink);
+  border: 0;
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--paper-hi);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--seat-line),
+    0 var(--px) 0 0 var(--seat-line),
+    calc(-1 * var(--px)) 0 0 0 var(--seat-line),
+    var(--px) 0 0 0 var(--seat-line),
+    0 calc(3 * var(--px)) 0 0 #2a223040;
+}
+.landing.game-page .game-seat:hover:not(:disabled) { background: #f6e3cf; }
+.landing.game-page .game-seat.seat-me { --seat-line: var(--ember); }
+.landing.game-page .game-seat.seat-speaking { --seat-line: var(--ember); background: #fbeee0; }
+.landing.game-page .game-seat.seat-speaking::after { content: ''; position: absolute; inset: calc(-3 * var(--px)); border: var(--px) dashed var(--ember-hi); pointer-events: none; }
+.landing.game-page .game-seat.seat-eliminated { --seat-line: #8a7d6c; color: var(--muted); background: #e3dccb; }
+.landing.game-page .game-seat.seat-selected { background: var(--target-bg); }
+.landing.game-page .game-seat-title b { color: var(--paper); background: var(--ink); font-family: 'Pixelify Sans', monospace; }
+.landing.game-page .seat-me .game-seat-title b { background: var(--ember); }
+.landing.game-page .game-seat-title strong { font-weight: 800; }
+.landing.game-page .seat-type { border: 0; color: var(--ink); background: #e6d8b6; font-weight: 700; }
+.landing.game-page .seat-life { color: #2f5a35; font-weight: 600; }
+.landing.game-page .seat-speaking .seat-life,
+.landing.game-page .seat-eliminated .seat-life { color: var(--ember-lo); }
+.landing.game-page .seat-role { color: var(--muted); }
+.landing.game-page .seat-selection { border: 0; box-shadow: 0 0 0 2px var(--paper-hi); }
+.landing.game-page .table-portrait .pixel-avatar { border: 0; box-shadow: 0 0 0 2px var(--ink); }
+
+.landing.game-page .game-stage-result {
+  border: 0;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(-1 * var(--px)) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    inset 0 var(--px) 0 0 var(--paper-hi),
+    inset calc(-1 * var(--px)) calc(-1 * var(--px)) 0 0 var(--paper-lo),
+    0 calc(3 * var(--px)) 0 0 #0a0c1447;
+}
+.landing.game-page .game-stage-result svg { color: var(--ember); }
+.landing.game-page .game-stage-result h3 { font-weight: 800; letter-spacing: .04em; }
+.landing.game-page .game-stage-result p { color: var(--muted); }
+
+/* 身份与行动栏 */
+.landing.game-page .game-skill-bar { padding: 14px 16px; }
+.landing.game-page .role-identity strong { color: var(--ink); font-weight: 800; }
+.landing.game-page .role-identity small { color: var(--muted); }
+.landing.game-page .role-emblem { border: 0; color: var(--paper); background: var(--ink); box-shadow: inset 0 calc(-1 * var(--px)) 0 0 #00000059; }
+.landing.game-page .game-action-panel { border-left: 0; box-shadow: inset var(--px) 0 0 0 #e2d4b0; }
+.landing.game-page .game-dock-title h2 { color: var(--ink); font-size: .9375rem; font-weight: 800; }
+.landing.game-page :is(.game-muted, .game-panel-description, .selection-summary) { color: var(--muted); }
+.landing.game-page .selection-summary strong { color: var(--ink); }
+.landing.game-page .game-text-button { color: var(--ink); font-weight: 700; text-decoration-thickness: 2px; }
+.landing.game-page .game-text-button:hover { color: var(--ember-lo); }
+.landing.game-page .potion-row { border: 0; background: var(--paper-hi); box-shadow: inset 0 0 0 2px #e2d4b0; }
+.landing.game-page .potion-row svg { color: #2f5a35; }
+.landing.game-page .potion-row.poison svg { color: #76557c; }
+.landing.game-page .potion-row small { color: var(--muted); }
+.landing.game-page .game-dock-target-list summary { color: var(--muted); font-weight: 700; }
+.landing.game-page .game-targets button { border: 0; color: var(--ink); background: var(--paper-hi); box-shadow: inset 0 0 0 2px #cdbd99; }
+.landing.game-page .game-targets button:hover:not(:disabled) { box-shadow: inset 0 0 0 2px var(--ink); }
+.landing.game-page .game-targets .selected { padding: 6px 7px; background: var(--target-bg); box-shadow: inset 0 0 0 var(--px) var(--target-color); }
+.landing.game-page .target-radio { color: var(--muted); }
+.landing.game-page .vote-tally li { border: 0; box-shadow: inset 0 -2px 0 0 #e2d4b0; }
+.landing.game-page .vote-tally strong { color: var(--ember-lo); }
+
+/* 村庄公聊 */
+.landing.game-page .game-chat-panel { padding: 14px 16px 12px; }
+.landing.game-page .game-chat-header h2 { color: var(--ink); font-weight: 800; letter-spacing: .04em; }
+.landing.game-page .game-chat-header h2 svg { color: var(--ember); }
+.landing.game-page .game-chat-header p { color: var(--muted); }
+.landing.game-page .game-chat-toolbar { border: 0; box-shadow: inset 0 -2px 0 0 #e2d4b0; }
+.landing.game-page .game-chat-toolbar select { border: 0; color: var(--ink); background: var(--paper-hi); box-shadow: inset 0 0 0 2px var(--paper-lo); }
+.landing.game-page .game-chat-channels button { border: 0; color: var(--muted); background: var(--paper-hi); box-shadow: inset 0 0 0 2px #cdbd99; font-weight: 700; }
+.landing.game-page .game-chat-channels button:hover:not(:disabled) { color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+.landing.game-page .game-chat-channels [aria-pressed=true],
+.landing.game-page .game-chat-channels [aria-pressed=true]:hover:not(:disabled) { color: var(--paper); background: var(--ink); box-shadow: none; }
+.landing.game-page .game-channel-note { color: var(--ink); background: #efe4c9; box-shadow: inset 0 0 0 2px var(--paper-lo); }
+.landing.game-page .game-turn-order summary { color: var(--ink); font-weight: 700; }
+.landing.game-page .game-turn-order .discussion-order { border: 0; background: var(--paper-hi); box-shadow: inset 0 0 0 2px #e2d4b0; }
+.landing.game-page .discussion-order li { border: 0; box-shadow: inset 0 -2px 0 0 #ede2c6; }
+.landing.game-page .discussion-order .current { background: #fbeee0; }
+.landing.game-page .discussion-order small { color: var(--muted); }
+.landing.game-page .game-chat-list:focus-visible { outline: var(--px) dashed var(--ember); }
+.landing.game-page .game-chat-empty { color: var(--muted); }
+.landing.game-page .game-chat-day { color: var(--muted); font-weight: 700; letter-spacing: .06em; }
+.landing.game-page .game-chat-day::before,
+.landing.game-page .game-chat-day::after { height: var(--px); background: var(--paper-lo); }
+.landing.game-page .game-chat-system { color: var(--muted); background: #efe4c9; box-shadow: inset 0 0 0 2px #e2d4b0; }
+.landing.game-page .game-message-author strong { color: var(--ink); font-weight: 800; }
+.landing.game-page .game-message-author small { color: var(--ink); background: #e6d8b6; font-weight: 700; }
+.landing.game-page .game-message-bubble {
+  --bubble-line: var(--ink);
+  border: 0;
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--paper-hi);
+  box-shadow:
+    0 -2px 0 0 var(--bubble-line),
+    0 2px 0 0 var(--bubble-line),
+    -2px 0 0 0 var(--bubble-line),
+    2px 0 0 0 var(--bubble-line),
+    0 calc(2 * var(--px)) 0 0 #2a223026;
+}
+.landing.game-page .is-mine .game-message-bubble { --bubble-line: var(--ember-lo); background: #fbeee0; }
+.landing.game-page .game-stream-label { color: var(--muted); }
+.landing.game-page .game-new-messages { border: 0; color: var(--paper); background: var(--ink); font-weight: 700; box-shadow: 0 var(--px) 0 0 #00000059; }
+.landing.game-page .game-chat-composer,
+.landing.game-page .game-chat-readonly { border: 0; box-shadow: inset 0 2px 0 0 #e2d4b0; padding-top: 10px; }
+.landing.game-page .game-composer-state,
+.landing.game-page .game-compose-actions small,
+.landing.game-page .game-chat-readonly { color: var(--muted); }
+.landing.game-page .game-speech-form textarea,
+.landing.game-page .wolf-chat-form input { border: 0; color: var(--ink); background: var(--paper-hi); box-shadow: inset 0 0 0 2px var(--ink); }
+.landing.game-page .game-chat-composer textarea:disabled { color: var(--muted); background: #efe4c9; box-shadow: inset 0 0 0 2px #cdbd99; }
+.landing.game-page .game-compose-actions .lobby-button { min-height: 40px; padding: 0 14px; font-size: .8125rem; }
+
+/* 页脚 */
+.landing.game-page .game-footer { gap: 8px 14px; margin-top: 18px; padding: 10px 14px; color: var(--muted); font-size: .75rem; }
+.landing.game-page .game-footer > span { padding: 0; border: 0; color: var(--muted); background: none; }
+.landing.game-page .game-footer > .game-leave { border: 0; color: var(--ink); background: var(--face); flex: none; min-height: 40px; margin: 0; padding: 0 14px; gap: 6px; font-size: .8125rem; white-space: nowrap; }
+.landing.game-page .game-footer .px-link { min-height: 40px; margin: 0; padding: 0 8px; border: 0; color: var(--ink); background: none; font-size: .8125rem; text-shadow: none; display: inline-flex; align-items: center; }
+
+/* 弹窗内容 */
+.landing.game-page .game-history p { border-top: 0; box-shadow: inset 0 2px 0 0 #e2d4b0; }
+.landing.game-page .game-history small { color: var(--muted); }
+.landing.game-page .game-private-result { color: var(--ink); }
+.landing.game-page .game-private-result svg { color: var(--ember); }
+
+@media (max-width: 1150px) {
+  .landing.game-page .game-main { width: calc(100% - 32px); }
+  .landing.game-page .game-layout,
+  .landing.game-page .game-left { gap: 14px; }
+  .landing.game-page .game-action-panel { box-shadow: none; }
+}
+@media (max-width: 850px) {
+  .landing.game-page .game-phase-header { border-top: 0; box-shadow: inset 0 2px 0 0 #e2d4b0; }
+  .landing.game-page .game-mobile-tabs button { min-height: 44px; }
+}
+@media (max-width: 640px) {
+  .landing.game-page .game-main { width: calc(100% - 20px); }
+  .landing.game-page .game-topline { padding: 12px; margin-bottom: 14px; }
+  .landing.game-page .game-room-sign h1 { font-size: 1.125rem; }
+  .landing.game-page .game-footer { padding: 10px; }
+  .landing.game-page .game-footer > .game-leave { width: 100%; }
+}
+@media (max-width: 620px) {
+  .landing.game-page .game-table-art { border-bottom: var(--px) solid var(--ink); }
+}

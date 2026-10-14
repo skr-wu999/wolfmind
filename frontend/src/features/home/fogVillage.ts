@@ -850,7 +850,7 @@ export function fitViewport(cssW: number, cssH: number, dpr: number): ViewportFi
   return { W, H, scale, cssWidth: (W * scale) / dpr, cssHeight: (H * scale) / dpr }
 }
 
-export interface FrameState { time: number; phase: VillagePhase; phaseTime: number; now: number }
+export interface FrameState { time: number; phase: VillagePhase; phaseTime: number; now: number; actors?: boolean }
 
 export interface FogVillageRenderer {
   resize(W: number, H: number): void
@@ -915,7 +915,7 @@ export function createFogVillage(canvas: HTMLCanvasElement): FogVillageRenderer 
     }
   }
 
-  function drawFrame(px: Pix, phase: VillagePhase, time: number, pt: number) {
+  function drawFrame(px: Pix, phase: VillagePhase, time: number, pt: number, actors: boolean) {
     const lay = layers![phase], p = palettes[phase], lay0 = L!
     const { W, H, g } = lay0
     px.data.set(lay.sky.data)
@@ -974,7 +974,7 @@ export function createFogVillage(canvas: HTMLCanvasElement): FogVillageRenderer 
       }
       const sparkAge = (time * 0.8) % 1
       px.set(sq.x + Math.round(Math.sin(time * 3) * 2), sq.y - 6 - Math.round(sparkAge * 8), p.fire)
-      const villagers = lay0.houses.map((h, i) => {
+      const villagers = !actors ? [] : lay0.houses.map((h, i) => {
         const start: [number, number] = [h.door.x + Math.floor(h.door.w / 2), h.base]
         const to = lay0.slots[i]
         const k = dayArrival(pt, i)
@@ -1001,14 +1001,14 @@ export function createFogVillage(canvas: HTMLCanvasElement): FogVillageRenderer 
       }
     } else {
       for (let k = 0; k < 4; k++) if (Math.sin(time * 4 + k * 2.1) > -0.3) px.set(sq.x - 2 + k, sq.y - (k % 2), k % 2 ? p.ember : p.fireRed)
-      const story = nightStory(pt), h = lay0.houses[lay0.storyHouse]
+      const story = nightStory(actors ? pt : 0), h = lay0.houses[lay0.storyHouse]
       if (story.doorOpen) px.rect(h.door.x, h.door.y, h.door.w - 1, h.door.h, p.winLit)
       if (!story.light) for (const w of h.windows) paintWindow(px, h, w, p, false, true)
       let pos: [number, number] | null = null
-      if (pt < 2.9) pos = null
+      if (!actors || pt < 2.9) pos = null
       else if (!story.inside && story.walkOut === 0) pos = along(lay0.wolfPath, story.walkIn)
       else if (story.walkOut > 0 && story.walkOut < 1) pos = along([...lay0.wolfPath].reverse(), story.walkOut)
-      if (pt < 2.9) {
+      if (actors && pt < 2.9) {
         const [ex, ey] = lay0.wolfPath[0]
         if (Math.floor(time * 4) % 9) { px.set(ex - 1, ey - 6, p.wolfEye); px.set(ex + 1, ey - 6, p.wolfEye) }
       }
@@ -1030,14 +1030,14 @@ export function createFogVillage(canvas: HTMLCanvasElement): FogVillageRenderer 
     px.blit(lay.front)
   }
 
-  function render({ time, phase, phaseTime, now }: FrameState) {
+  function render({ time, phase, phaseTime, now, actors = true }: FrameState) {
     if (!L || !layers) return
     if (shown === null) shown = phase
     if (phase !== shown) { from = shown; shown = phase; fadeStart = now }
     const k = (now - fadeStart) / 900
-    drawFrame(frameA, phase, time, phaseTime)
+    drawFrame(frameA, phase, time, phaseTime, actors)
     if (k < 1) {
-      drawFrame(frameB, from, time, phaseTime)
+      drawFrame(frameB, from, time, phaseTime, actors)
       const { w, h } = frameA, a = frameA.data, b = frameB.data
       const threshold = smooth(clamp(k))
       for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (bayer(x, y) >= threshold) a[y * w + x] = b[y * w + x]
