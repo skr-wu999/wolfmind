@@ -52,6 +52,7 @@ function changeMotion(event: Pick<MediaQueryListEvent, 'matches'>) {
 onMounted(() => {
   if (!scene.value || !canvas.value) return
   renderer = createFogVillage(canvas.value)
+  if (!renderer) return
   fit()
   observer = new ResizeObserver(fit)
   observer.observe(scene.value)

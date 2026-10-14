@@ -1,0 +1,128 @@
+/* 等待页沿用首页 .landing 令牌与大厅的 .lobby-shell / .lobby-board 网格；只换皮肤，座位定位与手机端网格仍由 waiting-room.css 负责。 */
+.waiting-page { display: flex; flex-direction: column; }
+.waiting-page .waiting-leave { min-height: 46px; padding: 0 18px; gap: 8px; font-size: .875rem; }
+
+.waiting-page .waiting-panel { display: flex; flex-direction: column; min-width: 0; padding: var(--card-pad); }
+.waiting-page .waiting-content { flex: 1; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; }
+.waiting-page .waiting-room-heading { align-items: flex-start; min-height: auto; margin-bottom: 16px; }
+.waiting-page .waiting-name-line { gap: 10px; }
+.waiting-page .waiting-name-line h2 { margin: 0; font-size: 1.375rem; }
+.waiting-page .waiting-room-heading p { margin: 4px 0 0; color: var(--muted); font-size: .8125rem; }
+.waiting-page .room-waiting-label {
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 0;
+  color: #2f5a35;
+  background: #d3e3b5;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 var(--px) #9fbf86;
+}
+.waiting-page .room-waiting-label i,
+.waiting-page .ready-badge i,
+.waiting-page .player-ready-state i { border-radius: 0; }
+
+.waiting-page .seat-layout-panel { border: 0; background: #efe4c9; box-shadow: inset 0 0 0 var(--px) var(--paper-lo); }
+.waiting-page .seat-layout-heading { min-height: 34px; padding: 0 12px; color: var(--paper); background: var(--ink); }
+.waiting-page .seat-layout-heading h3 { font-size: .8125rem; font-weight: 700; letter-spacing: .08em; }
+.waiting-page .seat-layout-heading > span { font-family: 'Pixelify Sans', monospace; }
+.waiting-page .seat-layout-heading small { color: #c9bfa8; }
+
+.waiting-page .waiting-seat {
+  --seat-line: var(--ink);
+  border: 0;
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--paper-hi);
+  box-shadow:
+    0 calc(-1 * var(--px)) 0 0 var(--seat-line),
+    0 var(--px) 0 0 var(--seat-line),
+    calc(-1 * var(--px)) 0 0 0 var(--seat-line),
+    var(--px) 0 0 0 var(--seat-line),
+    0 calc(3 * var(--px)) 0 0 #2a223033;
+}
+.waiting-page .waiting-seat:hover:not(:disabled) { background: #f6e3cf; }
+.waiting-page .waiting-seat.my-waiting-seat { --seat-line: var(--ember); background: #fbeee0; }
+.waiting-page .empty-waiting-seat { color: var(--muted); background: #f5ecd6cc; box-shadow: inset 0 0 0 2px #b8a47c; }
+.waiting-page .empty-waiting-seat:hover:not(:disabled) { background: var(--paper-hi); box-shadow: inset 0 0 0 2px var(--ink); }
+.waiting-page .seat-number { color: var(--muted); font: 500 .625rem/1 'Pixelify Sans', monospace; }
+.waiting-page .seat-kind { border-radius: 0; color: var(--ink); background: #e6d8b6; font-weight: 700; }
+.waiting-page .seat-kind.seat-owner { color: #fff8ec; background: var(--ember); }
+.waiting-page .seat-person strong { font-weight: 800; }
+.waiting-page .ready-badge { border-radius: 0; color: var(--muted); background: #e6d8b6; font-weight: 700; }
+.waiting-page .ready-badge.is-ready { color: #2f5a35; background: #d3e3b5; }
+
+.waiting-page .waiting-player-panel { padding: 14px; border: 0; background: #efe4c9; box-shadow: inset 0 0 0 var(--px) var(--paper-lo); }
+.waiting-page .waiting-player-heading { gap: 8px; margin-bottom: 12px; }
+.waiting-page .waiting-player-heading svg { color: var(--muted); }
+.waiting-page .waiting-player-heading h3 { color: var(--ink); font-size: 1rem; font-weight: 800; }
+.waiting-page .waiting-player-heading > span { color: var(--muted); font-family: 'Pixelify Sans', monospace; }
+.waiting-page .waiting-player-columns { padding: 7px 8px; color: var(--paper); background: var(--ink); font-weight: 700; letter-spacing: .06em; }
+.waiting-page .waiting-player-row { padding: 0 8px; border: 0; color: var(--muted); box-shadow: inset 0 calc(-1 * var(--px)) 0 0 #ddcca6; }
+.waiting-page .waiting-player-row button { color: var(--ink); font-weight: 600; }
+.waiting-page .waiting-player-row button:hover:not(:disabled) { color: var(--ember-lo); }
+.waiting-page .player-owner { color: #fff8ec; background: var(--ember); font-weight: 700; }
+.waiting-page .waiting-player-row button > small { color: var(--ember-lo); font-weight: 700; }
+.waiting-page .empty-avatar { border: 2px dashed #a8956c; border-radius: 0; color: var(--muted); }
+.waiting-page .player-ready-state { color: var(--muted); font-weight: 600; }
+.waiting-page .player-ready-state.is-ready { color: #2f5a35; }
+.waiting-page .waiting-player-summary { color: var(--muted); font-size: .75rem; font-weight: 600; }
+
+.waiting-page .waiting-panel-footer { margin-top: 12px; color: var(--muted); font-size: .75rem; }
+.waiting-page .waiting-panel-footer .seat-feedback { font-size: .75rem; }
+.waiting-page .waiting-panel-footer button { min-height: 40px; padding: 0 4px 0 8px; color: var(--ink); font-size: .8125rem; font-weight: 700; }
+.waiting-page .waiting-panel-footer button:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 4px; }
+.waiting-page .waiting-feedback { color: #2f5a35; font-weight: 600; }
+.waiting-page .waiting-load { color: var(--muted); }
+
+.waiting-page .waiting-actions { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: 22px; }
+.waiting-page .waiting-info-panel,
+.waiting-page .waiting-settings-panel { display: flex; flex-direction: column; padding: var(--card-pad); }
+.waiting-page .waiting-actions .action-card-heading { align-items: center; gap: 12px; margin: 0 0 10px; }
+.waiting-page .waiting-actions .action-card-heading h2 { margin: 0; font-size: 1.25rem; }
+.waiting-page .waiting-info,
+.waiting-page .waiting-settings { margin: 0; font-size: .8125rem; }
+.waiting-page .waiting-info > div,
+.waiting-page .waiting-settings > div { grid-template-columns: auto minmax(0, 1fr); gap: 12px; padding: 9px 0; border: 0; box-shadow: inset 0 calc(-1 * var(--px)) 0 0 #e2d4b0; }
+.waiting-page .waiting-info dt,
+.waiting-page .waiting-settings dt { gap: 8px; color: var(--muted); font-weight: 600; }
+.waiting-page .waiting-info dt svg,
+.waiting-page .waiting-settings dt svg,
+.waiting-page .waiting-info dd svg,
+.waiting-page .settings-details svg { color: var(--muted); }
+.waiting-page .waiting-info dd,
+.waiting-page .waiting-settings dd { justify-content: flex-end; color: var(--ink); font-weight: 700; text-align: right; }
+.waiting-page .waiting-copy { width: 100%; min-height: 44px; margin-top: 14px; font-size: .875rem; }
+.waiting-page .copy-feedback { margin: 8px 0 0; color: #2f5a35; font-size: .75rem; font-weight: 600; text-align: center; }
+
+.waiting-page .settings-details { min-height: 44px; margin-bottom: 16px; padding: 0; color: var(--ink); font-weight: 600; box-shadow: inset 0 calc(-1 * var(--px)) 0 0 #e2d4b0; }
+.waiting-page .settings-details b { color: var(--muted); }
+.waiting-page .ready-button,
+.waiting-page .start-game-button { width: 100%; min-height: 50px; margin-top: 14px; padding: 0 18px; }
+.waiting-page .ready-button { margin-top: auto; }
+.waiting-page .ready-button > span,
+.waiting-page .start-game-button > span { display: inline-flex; align-items: center; gap: 8px; }
+.waiting-page .ready-button.is-prepared:disabled { --face: #d3e3b5; --hi: #e4efcf; --lo: #a9c48f; color: #2f5a35; background: var(--face); }
+.waiting-page .start-game-button:disabled { background: var(--face); }
+.waiting-page .room-ai-fill { margin-top: 10px; color: var(--ink); font-weight: 600; }
+.waiting-page .room-ai-fill input { accent-color: var(--ember); }
+.waiting-page .start-hint { margin-top: 10px; color: var(--muted); font-size: .75rem; }
+.waiting-page .waiting-demo-note { color: var(--muted); font-size: .6875rem; }
+
+.waiting-page .seat-detail-actions .px-button { width: 100%; }
+.waiting-page .seat-detail-actions .lobby-button:hover:not(:disabled) { background: var(--face); }
+.waiting-page .seat-detail-person p { color: var(--muted); }
+
+@media (max-width: 1150px) and (min-width: 1001px) {
+  .waiting-page .waiting-content { grid-template-columns: 1fr; }
+}
+@media (max-width: 1000px) {
+  .waiting-page .waiting-actions { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+}
+@media (max-width: 720px) {
+  .waiting-page .waiting-content { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .waiting-page .waiting-actions { grid-template-columns: 1fr; }
+  .waiting-page .waiting-leave { width: 100%; }
+  .waiting-page .waiting-player-panel { padding: 12px 10px; }
+}

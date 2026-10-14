@@ -1,7 +1,7 @@
 /* 大厅沿用首页 .landing 的像素令牌；全部挂在 .lobby-page 下，盖过 lobby.css 中与等待页共用的旧样式。 */
 .lobby-page { display: flex; flex-direction: column; }
 /* 房间多时页面会很高；场景按容器高度取整放大，固定在视口内才能保持与首页一致的像素粒度。 */
-.lobby-page .fog-scene { position: fixed; }
+.landing:is(.lobby-page, .waiting-page) .fog-scene { position: fixed; }
 .lobby-shell {
   position: relative;
   z-index: 2;
@@ -29,9 +29,9 @@
 .lobby-page .room-table { flex: 1; }
 .lobby-page .list-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
 .lobby-page .list-heading h2,
-.lobby-page .action-card-heading h2 { margin: 0 0 4px; color: var(--ink); font-size: 1.375rem; font-weight: 800; line-height: 1.3; letter-spacing: .04em; }
+:is(.lobby-page, .waiting-page) .action-card-heading h2 { margin: 0 0 4px; color: var(--ink); font-size: 1.375rem; font-weight: 800; line-height: 1.3; letter-spacing: .04em; }
 .lobby-page .list-heading p,
-.lobby-page .action-card-heading p { margin: 0; color: var(--muted); font-size: .8125rem; line-height: 1.6; }
+:is(.lobby-page, .waiting-page) .action-card-heading p { margin: 0; color: var(--muted); font-size: .8125rem; line-height: 1.6; }
 
 .lobby-page .room-filters { display: flex; flex-shrink: 0; gap: var(--px); margin: 0; padding: var(--px); border: 0; background: var(--ink); }
 .lobby-page .room-filters button {
@@ -52,7 +52,7 @@
   box-shadow: inset var(--px) var(--px) 0 0 var(--ember-hi), inset calc(-1 * var(--px)) calc(-1 * var(--px)) 0 0 var(--ember-lo);
 }
 
-.lobby-page .lobby-error {
+:is(.lobby-page, .waiting-page) .lobby-error {
   margin: 0 0 12px;
   padding: 8px 10px;
   border: 0;
@@ -62,7 +62,7 @@
   font-weight: 600;
   box-shadow: inset var(--px) 0 0 0 var(--ember);
 }
-.lobby-page .lobby-error button { min-height: 36px; padding: 0 8px; color: inherit; font-weight: 700; text-underline-offset: 4px; }
+:is(.lobby-page, .waiting-page) .lobby-error button { min-height: 36px; padding: 0 8px; color: inherit; font-weight: 700; text-underline-offset: 4px; }
 
 .lobby-page .room-table-head,
 .lobby-page .room-row { display: grid; grid-template-columns: minmax(0, 2.4fr) .9fr .9fr .9fr 128px; align-items: center; gap: 12px; }
@@ -118,11 +118,11 @@
 .lobby-page .room-action { grid-column: auto; grid-row: auto; }
 .lobby-page .room-join { width: 100%; min-height: 42px; padding: 0 10px; gap: 6px; font-size: .8125rem; letter-spacing: .02em; }
 
-.lobby-page .empty-rooms,
+:is(.lobby-page, .waiting-page) .empty-rooms,
 .lobby-page .list-loading { min-height: 300px; color: var(--muted); }
-.lobby-page .empty-rooms svg,
+:is(.lobby-page, .waiting-page) .empty-rooms svg,
 .lobby-page .list-loading svg { color: var(--timer); }
-.lobby-page .empty-rooms h3 { color: var(--ink); font-weight: 800; }
+:is(.lobby-page, .waiting-page) .empty-rooms h3 { color: var(--ink); font-weight: 800; }
 
 .lobby-page .list-footer { margin-top: 10px; color: var(--muted); font-size: .75rem; }
 .lobby-page .list-footer button { min-height: 40px; padding: 0 4px 0 8px; color: var(--ink); font-size: .8125rem; font-weight: 700; }
@@ -133,7 +133,7 @@
 .lobby-page .lobby-actions { display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr auto; gap: 22px; }
 .lobby-page .create-room-panel,
 .lobby-page .join-room-panel { display: flex; flex-direction: column; padding: var(--card-pad); }
-.lobby-page .action-card-heading { display: flex; align-items: flex-start; gap: 12px; margin: 0; }
+:is(.lobby-page, .waiting-page) .action-card-heading { display: flex; align-items: flex-start; gap: 12px; margin: 0; }
 .action-icon {
   display: grid;
   place-items: center;
@@ -168,7 +168,7 @@
 .lobby-page .room-code-field:focus-within { outline: var(--px) dashed var(--ember); outline-offset: calc(3 * var(--px)); }
 .lobby-page .room-code-field input { min-height: 44px; padding: 0; color: var(--ink); font-size: .875rem; outline: none; }
 .lobby-page .room-code-field input::placeholder { color: #8a7d6c; }
-.lobby-page .form-error {
+:is(.lobby-page, .waiting-page) .form-error {
   margin: 0 0 12px;
   padding: 6px 10px;
   color: #8f2f17;
