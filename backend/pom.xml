@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.wolfmind</groupId>
+  <artifactId>wolfmind-backend</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>WolfMind Backend</name>
+  <description>WolfMind 在线狼人杀平台后端。engine = 领域内核（纯 Java），server = 应用层 + 基础设施 + 接口层。</description>
+
+  <modules>
+    <module>engine</module>
+    <module>server</module>
+  </modules>
+
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <junit.version>5.10.2</junit.version>
+    <sqlite.version>3.45.3.0</sqlite.version>
+    <!-- AGENTS.md §3 基线的 AI 技术栈；版本取本地仓库已缓存且镜像可解析的稳定版 -->
+    <langchain4j.version>1.20.0</langchain4j.version>
+    <langgraph4j.version>1.9.2</langgraph4j.version>
+    <!--
+      AGENTS.md §3 基线：后端用 Spring Boot 3。
+      取 3.5.5（Spring Framework 6.2.x + 内嵌 Tomcat 10.1.44），该组合的依赖闭包已在本地
+      Maven 仓库缓存，因此 CI 仍可 `-o` 离线构建。
+    -->
+    <spring-boot.version>3.5.5</spring-boot.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Spring Boot BOM：统一管理 Spring Framework / Tomcat / Jackson 版本 -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.wolfmind</groupId>
+        <artifactId>wolfmind-engine</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.xerial</groupId>
+        <artifactId>sqlite-jdbc</artifactId>
+        <version>${sqlite.version}</version>
+      </dependency>
+      <!-- LangChain4j：模型调用与工具声明（AGENTS.md §3、DESIGN.md §9） -->
+      <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j</artifactId>
+        <version>${langchain4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-open-ai</artifactId>
+        <version>${langchain4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-http-client-jdk</artifactId>
+        <version>${langchain4j.version}</version>
+      </dependency>
+      <!-- LangGraph4j：工作流执行（agent-runtime.md §8） -->
+      <dependency>
+        <groupId>org.bsc.langgraph4j</groupId>
+        <artifactId>langgraph4j-core</artifactId>
+        <version>${langgraph4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.2.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+          <configuration>
+            <compilerArgs>
+              <!--
+                Spring Framework 6.1 起不再从字节码推断方法参数名，@PathVariable / @RequestParam
+                等注解若省略 name 就需要这个标志，否则启动后调用直接 500：
+                "Name for argument of type [..] not specified, and parameter name information
+                not available via reflection."
+                显式打开而不是给每个注解写 name：注解少写一个 name 是很容易犯的错，
+                而这类错在运行时才暴露。
+              -->
+              <arg>-parameters</arg>
+            </compilerArgs>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

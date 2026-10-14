@@ -1,0 +1,95 @@
+# WolfMind 一键部署（Docker Compose）。
+#
+# 三个服务：redis（对局状态与事件流）、backend（Spring Boot）、frontend（Nginx + 静态产物）。
+# 前端把 /api 与 /ws 反代到 backend，因此浏览器只需要访问 frontend 一个地址 —— 没有 CORS，
+# 也没有"前端产物里写着后端主机名"这类换环境就出事的问题。
+#
+# 使用：
+#   cd deploy
+#   cp .env.example .env       # 填密钥（不填也能起，规则兜底模式）
+#   docker compose up -d --build
+#   打开 http://localhost:8080
+#
+# 构建上下文是仓库根目录：后端与前端都要各自的源码树，而 compose 文件在 deploy/ 下。
+
+name: wolfmind
+
+services:
+  redis:
+    image: redis:8-alpine
+    # AOF everysec + 命名卷：容器重建不该丢掉运行中的对局。
+    # 取舍与数据丢失窗口写在 docs/backend/redis-schema.md §14.4。
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec", "--save", ""]
+    volumes:
+      - wolfmind-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.backend
+      args:
+        # 受限网络下 Maven Central 会返回 403；在 deploy/.env 里填一个可达的镜像源即可，
+        # 例如 https://maven.aliyun.com/repository/public 。留空用官方 Central。
+        MAVEN_MIRROR_URL: ${WOLFMIND_MAVEN_MIRROR_URL:-}
+    environment:
+      # redis = 事件流/快照/锁/幂等/房间索引/会话 + SQLite 归档。
+      # 缺省 memory 只适合开发：重启即丢。
+      WOLFMIND_STORAGE: redis
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: "6379"
+      # SQLite 落在卷上（账号、归档事件、决策痕迹）。
+      WOLFMIND_SQLITE_PATH: /app/data/wolfmind.db
+      # LLM（可选）。未配置时对局仍能跑完：AI 走规则兜底，这是 agent-runtime.md §10 的要求。
+      WOLFMIND_LLM_PROVIDER: ${WOLFMIND_LLM_PROVIDER:-none}
+      WOLFMIND_LLM_API_KEY: ${WOLFMIND_LLM_API_KEY:-}
+      WOLFMIND_LLM_BASE_URL: ${WOLFMIND_LLM_BASE_URL:-}
+      WOLFMIND_LLM_MODEL: ${WOLFMIND_LLM_MODEL:-}
+      WOLFMIND_LLM_TIMEOUT_MS: ${WOLFMIND_LLM_TIMEOUT_MS:-30000}
+      WOLFMIND_LLM_THINKING: ${WOLFMIND_LLM_THINKING:-}
+      WOLFMIND_LLM_INTERACTION_MODE: ${WOLFMIND_LLM_INTERACTION_MODE:-FUNCTION_CALLING}
+      # 模型成本上限：单局 token 超过它之后该座位转规则兜底（0 = 不限）。
+      WOLFMIND_LLM_MAX_TOKENS_PER_GAME: ${WOLFMIND_LLM_MAX_TOKENS_PER_GAME:-0}
+      WOLFMIND_LAB_MAX_CONCURRENT_GAMES: ${WOLFMIND_LAB_MAX_CONCURRENT_GAMES:-8}
+      WOLFMIND_AGENT_MAX_CONCURRENT_TURNS: ${WOLFMIND_AGENT_MAX_CONCURRENT_TURNS:-8}
+      WOLFMIND_AGENT_WORKFLOW_ENGINE: ${WOLFMIND_AGENT_WORKFLOW_ENGINE:-LANGGRAPH4J}
+      WOLFMIND_AGENT_SPEECH_MODE: ${WOLFMIND_AGENT_SPEECH_MODE:-CONFIG}
+      WOLFMIND_GAME_DRIVER_MODE: ${WOLFMIND_GAME_DRIVER_MODE:-EVENT_DRIVEN}
+      WOLFMIND_GAME_DRIVER_QUEUE_SIZE: ${WOLFMIND_GAME_DRIVER_QUEUE_SIZE:-64}
+      WOLFMIND_ROOM_DISCONNECT_GRACE_MS: ${WOLFMIND_ROOM_DISCONNECT_GRACE_MS:-120000}
+      WOLFMIND_ROOM_RECONCILE_MS: ${WOLFMIND_ROOM_RECONCILE_MS:-30000}
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75 -Dfile.encoding=UTF-8 -Duser.timezone=UTC"
+    volumes:
+      - wolfmind-data:/app/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    # 后端不对外暴露端口：只有前端需要访问它。
+    # 需要直连调试时取消下面两行的注释。
+    # ports:
+    #   - "8080:8080"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.frontend
+      args:
+        # 同源部署：留空 → 请求走当前站点（Nginx 反代）。
+        # **这是构建期参数**，改完必须重新 build，改 environment 无效。
+        VITE_API_BASE_URL: ""
+        VITE_USE_REAL_API: "true"
+    ports:
+      - "${WOLFMIND_HTTP_PORT:-8080}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  wolfmind-redis-data:
+  wolfmind-data:

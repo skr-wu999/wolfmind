@@ -1,0 +1,97 @@
+# Java / Maven 构建产物
+target/
+*.class
+*.jar
+*.war
+*.hprof
+!**/.mvn/wrapper/maven-wrapper.jar
+
+# 前端依赖、构建缓存与测试输出；package-lock.json 保留
+node_modules/
+dist/
+coverage/
+.vite/
+.vite-temp/
+*.tsbuildinfo
+.qa/
+test-results*/
+test-artifacts/
+playwright-report/
+blob-report/
+
+# 本地环境变量和密钥；示例与模板保留
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.template
+!.env.*.template
+wolfmind-llm.properties
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_ecdsa
+id_ed25519
+
+# SQLite / Redis 运行数据与备份
+/backend/data/
+/deploy/data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
+*.rdb
+*.aof
+*.aof.*
+
+# 本地发布包和部署配置副本
+/wolfmind-images*.tar
+/wolfmind-images*.tar.gz
+/wolfmind-deploy*.tar.gz
+/wolfmind-source*.tar.gz
+/deploy/*.before-*
+/deploy/release-*-report.json
+/deploy/release-*-public-check.json
+__pycache__/
+*.py[cod]
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# 日志、临时文件与本地诊断
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+/backend/*.err
+/backend/live-channel-probe.json
+/backend/**/cp-e2e.txt
+.dsh-*
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# 本地生成的性能报告与架构核查结果
+/backend/server/perf-report.json
+/docs/architecture/.verify/

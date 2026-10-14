@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.wolfmind</groupId>
+    <artifactId>wolfmind-backend</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>wolfmind-engine</artifactId>
+  <name>WolfMind Engine (Domain)</name>
+  <description>
+    狼人杀领域内核：Game 聚合、角色、阶段状态机、行动校验、领域服务、领域事件。
+    只依赖 Java 标准库（ddd-design.md DEP-1/DEP-2、domain-model.md §10）。
+  </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

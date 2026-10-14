@@ -303,8 +303,15 @@
   .hud-controls { justify-self: end; }
 }
 @media (max-width: 380px) {
+  .landing-header { gap: 8px; }
+  .landing-brand { font-size: 1.125rem; gap: 8px; min-height: 44px; }
+  .brand-badge { width: 26px; height: 26px; }
   .px-link { padding: 0 5px; font-size: .8125rem; }
-  .landing .px-icon-button { margin-left: 2px; }
+  .landing .px-icon-button { margin-left: 0; }
   .lineup ul { gap: 8px; }
   .lineup li { font-size: .75rem; }
+}
+@media (max-width: 340px) {
+  .landing-header { flex-wrap: wrap; }
+  .landing-nav { width: 100%; justify-content: space-between; }
 }

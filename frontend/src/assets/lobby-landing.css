@@ -23,7 +23,7 @@
 .lobby-page .lobby-resume { display: flex; align-items: center; gap: 14px; margin: 0; padding: 8px 8px 8px 16px; font-size: .875rem; font-weight: 700; }
 .lobby-page .lobby-resume .px-button { min-height: 44px; padding: 0 16px; font-size: .875rem; }
 
-.lobby-board { --card-pad: 20px 22px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: stretch; gap: 22px; }
+.lobby-board { --card-pad: 20px 22px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: start; gap: 24px; }
 
 .lobby-page .room-list-panel { display: flex; flex-direction: column; min-width: 0; padding: var(--card-pad); }
 .lobby-page .room-table { flex: 1; }
@@ -130,7 +130,7 @@
 .lobby-page .room-pagination span { font-family: 'Pixelify Sans', monospace; }
 .lobby-page .room-pagination button:disabled { color: #9a8f7c; }
 
-.lobby-page .lobby-actions { display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr auto; gap: 22px; }
+.lobby-page .lobby-actions { display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto; gap: 24px; }
 .lobby-page .create-room-panel,
 .lobby-page .join-room-panel { display: flex; flex-direction: column; padding: var(--card-pad); }
 :is(.lobby-page, .waiting-page) .action-card-heading { display: flex; align-items: flex-start; gap: 12px; margin: 0; }
@@ -145,7 +145,7 @@
   background: var(--ink);
   box-shadow: inset 0 calc(-1 * var(--px)) 0 0 #00000059;
 }
-.create-lineup { flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 16px 0; padding: 12px 10px 10px; background: #ebdfc2; box-shadow: inset 0 0 0 var(--px) var(--paper-lo); }
+.create-lineup { display: flex; flex-direction: column; margin: 20px 0; padding: 0; }
 .create-lineup ul { display: flex; justify-content: space-around; margin: 0; padding: 0; list-style: none; }
 .create-lineup p { display: grid; gap: 2px; margin: 10px 0 0; color: var(--muted); font-size: .75rem; font-weight: 600; line-height: 1.5; text-align: center; }
 .create-lineup strong { color: var(--ink); font-size: .8125rem; }

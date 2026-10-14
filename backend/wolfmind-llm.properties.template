@@ -1,0 +1,45 @@
+# WolfMind LLM 参数模板
+#
+# 使用方式（三选一；优先级：IDEA 的 VM options > 环境变量 > 本文件）
+#   1) IDEA 运行配置的 VM options:
+#        -Dwolfmind.llm.provider=openai -Dwolfmind.llm.apiKey=sk-xxx -Dwolfmind.llm.model=gpt-4o-mini
+#   2) 环境变量:
+#        WOLFMIND_LLM_PROVIDER / WOLFMIND_LLM_BASE_URL / WOLFMIND_LLM_API_KEY / WOLFMIND_LLM_MODEL
+#   3) 复制本文件为同目录下的 wolfmind-llm.properties 并填写
+#
+# 重要：wolfmind-llm.properties 已加入 .gitignore，不要把真实密钥提交到仓库。
+# 未配置（provider=none）时系统仍可运行：9 个 AI 会走纯规则兜底完成对局。
+
+# 供应商：openai / openai-compatible / deepseek / ollama / none
+provider=none
+# 原生工具调用为默认；回退可设 JSON_PROPOSAL
+interactionMode=FUNCTION_CALLING
+
+# 兼容 OpenAI 协议的基址；留空使用供应商默认值
+#   OpenAI:     https://api.openai.com/v1
+#   DeepSeek:   https://api.deepseek.com/v1
+#   Ollama:     http://localhost:11434/v1
+baseUrl=
+
+# 密钥；ollama 与 none 可留空
+apiKey=
+
+# 默认模型名；AgentConfig 未指定模型时使用
+#   OpenAI:   gpt-4o-mini / gpt-4o
+#   DeepSeek: deepseek-chat
+#   Ollama:   qwen2.5:7b
+model=
+
+# 单次调用超时（毫秒）
+timeoutMs=30000
+
+# 网络层重试次数（不含"输出修复"轮，后者由 agent.maxLlmCallsPerTurn 约束）
+maxRetries=1
+
+# 推理模式（DeepSeek 等支持 thinking 请求字段的供应商）；环境变量 WOLFMIND_LLM_THINKING
+#   留空:       不发送该字段，沿用供应商默认
+#   enabled:    始终开启推理
+#   disabled:   始终关闭推理
+#   speech-off: 白天发言与遗言关闭推理（保速度），夜间行动、投票、开枪保留推理
+#   speech-low: 白天发言与遗言用低强度推理（reasoning_effort=low），其余回合保留默认推理
+thinking=

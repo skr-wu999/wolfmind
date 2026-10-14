@@ -1,0 +1,70 @@
+# WolfMind 后端镜像（多阶段）。
+#
+# 两条约束决定了这个文件的样子：
+#
+# 1. **构建与运行分离**：镜像里不放 Maven 与源码。运行阶段只有 JRE + 一个 fat jar，
+#    这样"部署了什么"与"用什么构建的"是两个可以分别回答的问题。
+# 2. **构建可复现**：基础镜像与工具版本都钉住（`-jdk21` / `-jre21` 指 eclipse-temurin 的
+#    明确 JDK/JRE 标签，Maven 用 3.9.11）。浮动标签会让"昨天能构建、今天不能"成为常态。
+#
+# 构建上下文是**仓库根目录**（compose 里 `context: ..`）：后端要 backend/engine 与 backend/server
+# 两个模块一起编译，只给 backend/ 会缺父 pom 的相对路径。
+
+# ---------------------------------------------------------------- 构建阶段
+FROM maven:3.9.11-eclipse-temurin-21 AS build
+WORKDIR /workspace/backend
+
+# 可选镜像源。
+#
+# **为什么需要这个参数**：不少网络环境访问 Maven Central 会被拒绝（403），
+# 而镜像构建失败会让人以为是 Dockerfile 有问题。显式给一个镜像参数，
+# 把"能不能拉到依赖"变成一次构建参数，而不是一次改 Dockerfile 的调试。
+# 留空时使用 Maven 默认仓库（官方 Central）。
+ARG MAVEN_MIRROR_URL=""
+RUN if [ -n "$MAVEN_MIRROR_URL" ]; then \
+      mkdir -p /root/.m2 && printf '%s' \
+        "<settings><mirrors><mirror><id>build-mirror</id><mirrorOf>*</mirrorOf><url>${MAVEN_MIRROR_URL}</url></mirror></mirrors></settings>" \
+        > /root/.m2/settings.xml; \
+    fi
+
+# 先只拷 pom，把依赖层单独缓存：源码改动不会让整份依赖重新下载。
+COPY backend/pom.xml ./pom.xml
+COPY backend/engine/pom.xml ./engine/pom.xml
+COPY backend/server/pom.xml ./server/pom.xml
+RUN mvn -B -q -pl server -am -DskipTests dependency:go-offline || true
+
+COPY backend/engine/src ./engine/src
+COPY backend/server/src ./server/src
+# 测试在镜像构建里**不跑**：AGENTS.md §10 要求测试结果来自真实执行，
+# 而镜像构建里的测试失败会被 `--no-cache` 与缓存层掩盖成"有时通过"。
+# 测试在 CI/本地 `mvn test` 跑；这里只负责产出可运行产物。
+RUN mvn -B -pl server -am -DskipTests package
+
+# ---------------------------------------------------------------- 运行阶段
+FROM eclipse-temurin:21-jre
+# curl 只为了 HEALTHCHECK。temurin 的 JRE 镜像里没有 curl，
+# 而"健康检查永远失败"比"没有健康检查"更糟：编排层会把一个正常工作实例反复重启。
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl \
+ && rm -rf /var/lib/apt/lists/*
+# 用非 root 运行：容器逃逸的影响面与"文件属于 root"这类运维麻烦都少一半。
+RUN useradd --create-home --uid 10001 wolfmind
+WORKDIR /app
+
+COPY --from=build /workspace/backend/server/target/wolfmind-server-*.jar /app/wolfmind-server.jar
+
+# SQLite 归档与账号库落在挂载卷上：容器重建不该带走账号与已归档的对局。
+RUN mkdir -p /app/data && chown -R wolfmind:wolfmind /app
+VOLUME ["/app/data"]
+USER wolfmind
+
+EXPOSE 8080
+
+# 健康检查打 /api/v1/health：它是依赖健康（Redis/SQLite/LLM），
+# 而不是"进程还活着"——后者对编排层几乎没有信息量。
+HEALTHCHECK --interval=15s --timeout=5s --start-period=40s --retries=5 \
+  CMD ["sh", "-c", "curl -fsS http://127.0.0.1:8080/api/v1/health || exit 1"]
+
+# 默认存储模式是 memory（不需要 Redis）。Compose 里显式设成 redis。
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75 -Dfile.encoding=UTF-8 -Duser.timezone=UTC"
+ENTRYPOINT ["java", "-jar", "/app/wolfmind-server.jar"]

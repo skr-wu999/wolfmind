@@ -1,0 +1,27 @@
+# Docker 构建上下文排除项（上下文是仓库根目录）。
+#
+# 构建产物、依赖目录与运行期数据一律不进上下文：它们既让传输变慢，
+# 又可能把**运行期的 SQLite 库与日志**打进镜像层——那是数据泄漏，不是缓存优化问题。
+
+**/target/
+**/node_modules/
+**/dist/
+**/test-results/
+**/test-artifacts/
+**/.idea/
+**/.vscode/
+**/.dsh-acl-recovery/
+
+# 运行期数据：账号库、归档事件、决策痕迹。
+backend/data/
+**/*.db
+**/*.db-wal
+**/*.db-shm
+
+# 日志与构建记录
+*.log
+deploy/.env
+
+# 仓库自身的元数据
+.git/
+.gitignore

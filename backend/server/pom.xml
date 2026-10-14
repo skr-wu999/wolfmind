@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.wolfmind</groupId>
+    <artifactId>wolfmind-backend</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>wolfmind-server</artifactId>
+  <name>WolfMind Server (Application + Infrastructure + Interface)</name>
+  <description>
+    应用层（用例编排，不含规则）、基础设施层（端口的内存/Redis/SQLite 实现）、接口层（REST/WS）。
+    模块边界即 ddd-design.md §5.1 的层边界：engine 是纯领域，不依赖本模块。
+  </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.wolfmind</groupId>
+      <artifactId>wolfmind-engine</artifactId>
+    </dependency>
+
+    <!--
+      Spring Boot 3（AGENTS.md §3 基线）：REST 接口层改用 Spring MVC + 内嵌 Tomcat，
+      Jackson 负责 JSON。原来手写的 com.sun.net.httpserver 路由与自研 JSON 编解码已移除。
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!--
+      WebSocket（AGENTS.md §3 基线的 Realtime 一行）。
+      **它不是为了 spring-websocket 的注解能力，而是为了 ServerEndpointExporter 的时序**：
+      内嵌 Tomcat 不做 ServletContainerInitializer 发现，因此 Tomcat 的 WsSci 不会自动跑，
+      负责 HTTP 升级的 WsFilter 就注册不上——表现为"端点注册成功但 /ws 返回 404"。
+      ServerEndpointExporter 在正确的时机做这件事。早期为了省一个依赖而自己反射调
+      WsSci.init 是错的：拿到了容器但过滤器时机已过，端点照样连不上。
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
+
+    <!--
+      Redis（AGENTS.md §3 基线：运行中对局与事件流）。Lettuce 客户端，版本由 Spring Boot BOM 管理；
+      只允许出现在 com.wolfmind.infrastructure.redis（DEP-5）。存储实现由 wolfmind.storage 选择，
+      默认 memory，因此测试与离线开发不需要 Redis 实例。
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+    <!--
+      SQLite 归档：唯一允许出现在 infrastructure.sqlite 的第三方依赖（DEP-5）。
+    -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+    </dependency>
+
+    <!--
+      AI 子系统：LangChain4j 负责模型调用，LangGraph4j 负责工作流执行（AGENTS.md §3、DESIGN.md §9）。
+      按 DEP-5，这两者只允许出现在 com.wolfmind.infrastructure.ai 的实现里；
+      application.agent 只依赖自己定义的 LlmClient / WorkflowEngine 端口。
+    -->
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-open-ai</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-http-client-jdk</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.bsc.langgraph4j</groupId>
+      <artifactId>langgraph4j-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!--
+        可执行 fat jar：容器部署需要"一个 jar + 一条 java -jar"就能起服务。
+        没有它时 `mvn package` 产出的 jar 没有 Main-Class、也没有依赖，
+        部署脚本就得自己拼 classpath —— 而"拼 classpath"是每一份部署文档里最容易过期的一段。
+
+        版本显式写成 3.5.3 而不是 ${spring-boot.version}（3.5.5）：
+        repackage 与 BOM 不要求同一个小版本，而 3.5.3 是本机构建环境里已缓存的版本，
+        这样 CI 仍能 `-o` 离线构建。升级时两者一起升。
+      -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.5.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

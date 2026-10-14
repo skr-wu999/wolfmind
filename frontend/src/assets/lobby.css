@@ -1,0 +1,148 @@
+.start-button { text-decoration: none; }
+.lobby { min-height: max(880px, 100svh); }
+.lobby .header { min-height: 64px; padding-inline: 4.75%; }
+.lobby .scene { height: 100%; --scene-position: 50%; --scene-vertical-position: 100%; }
+.lobby-main { position: relative; z-index: 2; padding: 0 0 100px; flex: 1; pointer-events: none; }
+.lobby-heading { margin: 0 7% 23px; color: var(--scene-ink); }
+.lobby-heading .location-label { font-size: .8125rem; letter-spacing: 1.5px; }
+.lobby-heading h1 { font-size: clamp(2.1rem, 3vw, 2.8rem); line-height: 1.2; margin: 20px 0 8px; font-weight: 800; letter-spacing: 2px; }
+.lobby-heading p { font-size: 1rem; margin: 0; line-height: 1.6; }
+.lobby-heading .lobby-resume { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 14px; pointer-events: auto; }
+.lobby-resume .lobby-button { min-height: 44px; width: auto; }
+.lobby-grid { width: min(1240px, calc(100% - 120px)); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 310px; align-items: start; gap: 12px; pointer-events: auto; }
+.wood-panel { border: 12px solid #8a603c; border-image: url('/images/wood-frame.svg') 12 / 12px / 0 stretch; background: #f7f0df; box-shadow: 0 4px 0 #34443870; color: #2b3226; position: relative; }
+.room-list-panel { padding: 21px 21px 10px; min-width: 0; }
+.list-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+.list-intro { display: flex; align-items: center; gap: 17px; min-width: 0; }
+.list-intro h2, .action-card-heading h2 { font-size: 1.55rem; font-weight: 750; line-height: 1.2; margin: 0 0 4px; color: #22291f; }
+.list-intro p, .action-card-heading p { font-size: .8125rem; line-height: 1.6; margin: 0; color: #5d6252; }
+.forest-emblem { color: #4c7839; display: flex; align-items: flex-end; width: 45px; flex-shrink: 0; }
+.forest-emblem svg:last-child { margin-left: -11px; color: #6e913f; }
+.room-filters { display: flex; flex-shrink: 0; border: 1px solid #d6c9aa; }
+.room-filters button { border: 0; border-right: 1px solid #d6c9aa; background: transparent; color: #5d6252; min-height: 36px; padding: 8px 14px; font-size: .8125rem; white-space: nowrap; }
+.room-filters button:last-child { border-right: 0; }
+.room-filters button:hover { background: #e8dfc9; }
+.room-filters button.selected { background: var(--orange); color: #fff9ef; border-color: #9f482b; font-weight: 600; }
+.room-table-head, .room-row { display: grid; grid-template-columns: minmax(0, 2.55fr) .9fr 1fr .95fr 126px; align-items: center; gap: 12px; }
+.room-table-head { background: #e9dfc5; font-size: .8125rem; min-height: 35px; padding: 8px 14px; border: 1px solid #e0d3b6; }
+.room-row { border: 1px solid #e0d3b6; border-top: 0; min-height: 73px; padding: 8px 14px; transition: background-color .15s; }
+.room-row:hover { background: #eee7d3; }
+.room-identity { display: flex; gap: 15px; align-items: center; min-width: 0; }
+.room-identity > div { min-width: 0; }
+.room-identity h3 { font-size: 1rem; font-weight: 650; line-height: 1.4; margin: 0; overflow-wrap: anywhere; }
+.room-identity p { font-size: .75rem; line-height: 1.5; color: #636657; margin: 3px 0 0; }
+.room-number { display: block; font-size: .6875rem; line-height: 1.15; color: #6b6b5b; }
+.village-illustration { width: 59px; height: 47px; flex-shrink: 0; border: 1px solid #d7c8a5; background: #e7dfbf; image-rendering: pixelated; }
+.room-mode > span { background: #eae2cc; display: inline-block; padding: 5px 10px; font-size: .75rem; white-space: nowrap; }
+.room-occupancy { display: flex; align-items: center; gap: 9px; font-size: .8125rem; color: #585e51; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.room-occupancy small { display: block; font-size: .6875rem; }
+.room-status { display: flex; align-items: center; gap: 7px; font-size: .8125rem; white-space: nowrap; }
+.room-status i { display: inline-block; width: 8px; height: 8px; background: currentColor; border-radius: 50%; flex-shrink: 0; }
+.status-waiting { color: #39733c; }
+.status-playing { color: #995512; }
+.lobby-button { width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border: 1px solid #8b4025; background: #b65330; color: #fff9ef; box-shadow: 0 2px 0 #8b4025; font-size: .875rem; line-height: 1.4; font-weight: 600; text-decoration: none; }
+.lobby-button:hover:not(:disabled) { background: #a84a29; }
+.lobby-button:disabled { background: #e0d9c8; color: #6e6c60; border-color: #d2c8af; box-shadow: none; cursor: default; }
+.lobby-button > span { display: flex; align-items: center; gap: 9px; }
+.room-action .lobby-button { font-size: .8125rem; padding: 10px 12px; }
+.list-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; margin-top: 11px; font-size: .6875rem; line-height: 1.5; color: #6b6b5b; }
+.list-footer button { display: flex; align-items: center; gap: 6px; background: none; border: 0; padding: 5px 0 5px 8px; min-height: 30px; white-space: nowrap; color: #4e644a; font-size: .75rem; }
+.room-pagination { display: flex; align-items: center; gap: 8px; }
+.room-pagination button { justify-content: center; min-width: 32px; padding: 5px; }
+.room-pagination button:disabled { color: #858575; cursor: default; }
+.lobby-actions { display: grid; gap: 12px; }
+.create-room-panel, .join-room-panel { padding: 19px 19px 17px; }
+.action-card-heading { display: flex; align-items: flex-start; gap: 16px; }
+.action-card-heading > svg { color: #77502e; flex-shrink: 0; margin-top: 2px; }
+.action-card-heading h2 { font-size: 1.5rem; margin-bottom: 5px; }
+.outline-icon { border: 2px solid #76532e; color: #76532e; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.illustration-large { width: 100%; height: 149px; border: 0; margin: 14px 0 16px; object-fit: contain; object-position: center bottom; }
+.create-room-button { min-height: 51px; }
+.join-room-panel .action-card-heading { margin-bottom: 16px; }
+.room-code-field { display: flex; align-items: center; gap: 12px; padding: 0 12px; min-height: 44px; border: 1px solid #737760; background: #faf7ec; color: #4d584a; margin-bottom: 10px; }
+.room-code-field input { border: 0; width: 100%; min-width: 0; min-height: 42px; padding: 10px 0; background: transparent; color: var(--ink); font-size: .8125rem; }
+.room-code-field input:focus-visible { outline-offset: -2px; }
+.roof-wolf { position: absolute; right: 15px; bottom: calc(100% + 7px); width: 66px; height: 69px; pointer-events: none; }
+.hanging-lantern { position: absolute; left: -51px; top: -1px; height: 28px; width: 41px; border-top: 7px solid #805733; box-shadow: inset 0 2px #b08448; }
+.hanging-lantern::before { content: ''; position: absolute; left: 2px; top: -10px; height: 19px; width: 10px; background: #8c613b; border: 2px solid #483c29; }
+.hanging-lantern::after { content: ''; position: absolute; left: 7px; top: 7px; width: 3px; height: 30px; background: #474b38; }
+.hanging-lantern i { position: absolute; left: -3px; top: 38px; width: 24px; height: 36px; background: #f7c66f; border: 5px solid #535540; box-shadow: inset 4px 0 #dfa661, 0 3px #414933; }
+.wood-sign { position: absolute; left: 6.9%; bottom: 148px; pointer-events: auto; display: flex; align-items: center; gap: 10px; background: #976c43; border: 2px solid #513f2b; box-shadow: inset 0 0 0 2px #c1935e, 2px 3px 0 #34443860; color: #fff2d4; text-decoration: none; padding: 11px 15px; font-size: .875rem; min-height: 44px; }
+.wood-sign::after { content: ''; position: absolute; z-index: -1; top: 100%; left: 44%; width: 10px; height: 70px; background: #755632; border-inline: 2px solid #4b432c; }
+.lobby-error { padding: 12px; border: 1px solid #ae7351; color: #913e23; background: #f4e6d1; font-size: .875rem; line-height: 1.6; }
+.lobby-error button { border: 0; padding: 5px 10px; background: transparent; color: inherit; text-decoration: underline; min-height: 36px; }
+.empty-rooms, .list-loading { min-height: 360px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 28px; text-align: center; color: #5d6653; }
+.empty-rooms h3, .empty-rooms p { margin: 0; }
+.empty-rooms h3 { font-size: 1.1rem; }
+.empty-rooms p { font-size: .875rem; line-height: 1.7; }
+.framed-dialog { border: 8px solid #795a3d; border-image: url('/images/wood-frame.svg') 12 / 8px / 0 stretch; }
+.visibility-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; border: 0; margin: 20px 0; padding: 0; }
+.visibility-options legend { font-size: .875rem; font-weight: 600; margin-bottom: 10px; }
+.visibility-options label { border: 1px solid #b7b69c; padding: 13px; font-size: .875rem; line-height: 1.5; }
+.visibility-options input { width: auto; min-height: auto; accent-color: #b65330; margin: 0 7px 0 0; }
+.visibility-options span { display: block; font-size: .75rem; color: #606650; margin-top: 5px; }
+.rules-summary { display: flex; align-items: center; gap: 13px; padding: 13px; background: #e9e4d1; }
+.rules-summary strong { font-size: .875rem; }
+.rules-summary p { margin: 5px 0 0; font-size: .75rem; line-height: 1.5; color: #606650; }
+.room-preview-main { position: relative; z-index: 2; width: min(760px, calc(100% - 48px)); margin: 24px auto 105px; }
+.room-preview-panel { padding: 27px; }
+.room-preview-panel h1 { font-size: clamp(1.6rem, 3vw, 2rem); line-height: 1.4; margin: 12px 0 18px; overflow-wrap: anywhere; }
+.preview-meta { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 12px; font-size: .875rem; color: #5d6252; }
+.copy-room-code { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; background: #eee6cf; border: 1px solid #c5bda3; font-size: .8125rem; }
+.copy-room-code > span { color: #477043; }
+.copy-feedback { font-size: .8125rem; color: #39733c; }
+.seat-feedback { border-top: 1px solid #d6c9aa; margin-top: 20px; padding-top: 17px; font-size: .9375rem; }
+.preview-seats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }
+.preview-seat { display: flex; flex-direction: column; align-items: center; gap: 7px; min-height: 126px; padding: 16px 8px; border: 1px solid #c7bd9e; background: #eee7d3; font-size: .8125rem; }
+.preview-seat svg { color: #718563; }
+.preview-seat small { color: #656956; font-size: .6875rem; }
+.preview-seat.my-seat { border-color: #a64b2c; background: #efe0c7; box-shadow: inset 0 0 0 1px #a64b2c; }
+.preview-seat.my-seat svg { color: #a64b2c; }
+.preview-seat.empty-seat { background: #f7f2e3; }
+.preview-join { max-width: 280px; margin: 0 auto; }
+@media (min-width: 1500px) { .lobby-grid { transform: translateX(24px); } }
+@media (max-width: 1400px) {
+  .lobby-grid { width: calc(100% - 80px); grid-template-columns: minmax(0, 1fr) 280px; }
+  .list-heading { align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; }
+  .list-intro h2 { font-size: 1.5rem; }.room-filters { margin-left: auto; }
+  .room-table-head, .room-row { grid-template-columns: minmax(0, 2.25fr) .9fr .85fr .8fr 116px; gap: 9px; }
+  .room-identity { gap: 10px; }.room-list-panel { padding-inline: 16px; }.room-identity p { font-size: .6875rem; }
+  .illustration-large { height: 155px; }.action-card-heading { gap: 12px; }.action-card-heading h2 { font-size: 1.4rem; }
+  .wood-sign { left: 40px; bottom: 110px; }.hanging-lantern { display: none; }
+}
+@media (max-width: 1100px) {
+  .lobby-grid { grid-template-columns: minmax(0, 1fr) 250px; width: calc(100% - 44px); gap: 10px; }
+  .room-row, .room-table-head { grid-template-columns: minmax(0, 1fr) 70px 64px 74px 100px; gap: 7px; padding-inline: 10px; }
+  .room-identity .village-illustration { width: 44px; height: 40px; }.room-identity h3 { font-size: .875rem; }
+  .room-mode > span { font-size: .6875rem; padding-inline: 6px; }.room-status, .room-occupancy { font-size: .75rem; gap: 5px; }.room-occupancy svg { display: none; }
+  .room-action .lobby-button { font-size: .75rem; padding-inline: 9px; }.room-action .lobby-button svg { width: 15px; }
+  .create-room-panel, .join-room-panel { padding: 19px 14px 17px; }.action-card-heading { gap: 10px; }.action-card-heading p { font-size: .75rem; }
+  .lobby-heading { margin-left: 4%; }.lobby-heading h1 { margin-top: 17px; }.wood-sign { position: relative; left: auto; bottom: auto; margin: 23px 0 0 24px; width: fit-content; }
+}
+@media (max-width: 900px) {
+  .lobby-grid { grid-template-columns: 1fr; width: calc(100% - 44px); gap: 20px; }
+  .lobby-actions { grid-template-columns: 1fr 1fr; gap: 15px; align-items: stretch; }
+  .create-room-panel { display: grid; grid-template-columns: 1fr; }.illustration-large { height: 110px; margin-block: 13px; }
+  .join-room-panel { display: flex; flex-direction: column; justify-content: space-between; }.join-room-panel form { margin-top: auto; }
+  .roof-wolf { display: none; }.list-heading { align-items: center; }.room-table-head, .room-row { grid-template-columns: minmax(0, 2fr) 78px 78px 82px 120px; }
+  .room-identity .village-illustration { width: 52px; height: 44px; }.room-identity h3 { font-size: 1rem; }.room-identity p { font-size: .75rem; }
+  .room-status, .room-occupancy { font-size: .8125rem; }.room-action .lobby-button { font-size: .8125rem; }
+  .wood-sign::after { height: 35px; }.lobby-heading { margin: 5px 24px 24px; }.lobby .header { min-height: 74px; }
+}
+@media (max-width: 620px) {
+  .lobby { min-height: 100svh; }.lobby .scene { position: fixed; height: 100svh; --scene-position: 36%; --scene-vertical-position: 100%; }
+  .lobby-heading { margin: 10px 22px 25px; }.lobby-heading h1 { margin-top: 15px; font-size: 2.15rem; }.lobby-heading p { font-size: .875rem; }
+  .lobby-grid { width: calc(100% - 24px); }.wood-panel { border-width: 9px; border-image-width: 9px; }.room-list-panel { padding: 16px 12px 10px; }
+  .list-heading { display: block; margin-bottom: 17px; }.list-intro { gap: 12px; }.list-intro h2 { font-size: 1.375rem; }.list-intro p { font-size: .75rem; }.forest-emblem { width: 38px; }
+  .room-filters { width: 100%; margin-top: 16px; }.room-filters button { flex: 1; padding: 10px 4px; min-height: 44px; font-size: .75rem; }
+  .room-table-head { display: none; }.room-row { grid-template-columns: minmax(0, 1fr) 112px; gap: 10px; padding: 13px 10px; border: 1px solid #dfd4b6; margin-bottom: 10px; }
+  .room-identity { grid-column: 1 / -1; }.room-identity .village-illustration { width: 54px; height: 46px; }.room-identity h3 { font-size: .9375rem; }.room-identity p { font-size: .75rem; }
+  .room-mode { grid-column: 1; grid-row: 2; }.room-occupancy { grid-column: 1; grid-row: 3; }.room-status { grid-column: 2; grid-row: 2; justify-content: flex-start; }.room-action { grid-column: 2; grid-row: 3; }
+  .room-mode > span { font-size: .75rem; }.room-occupancy svg { display: block; }.room-action .lobby-button { min-height: 44px; }
+  .list-footer { align-items: flex-start; margin-top: 3px; }.list-footer > span { max-width: 70%; }.list-footer button { min-height: 44px; padding-top: 0; }
+  .lobby-actions { grid-template-columns: 1fr; gap: 18px; }.create-room-panel, .join-room-panel { padding: 20px; }.create-room-panel { display: block; }.illustration-large { height: 160px; }
+  .action-card-heading h2 { font-size: 1.5rem; }.action-card-heading p { font-size: .8125rem; }.lobby-main { padding-bottom: 110px; }.wood-sign { margin-left: 20px; }
+  .room-preview-main { width: calc(100% - 24px); margin-top: 16px; }.room-preview-panel { padding: 18px 13px; }.preview-seats { gap: 7px; }.preview-seat { min-height: 118px; font-size: .75rem; }.preview-seat small { font-size: .625rem; }
+  .visibility-options { grid-template-columns: 1fr; }.empty-rooms, .list-loading { min-height: 230px; padding-inline: 15px; }
+}
+@media (max-width: 360px) { .lobby .header { padding-inline: 10px; }.lobby-heading { margin-inline: 17px; }.room-list-panel { padding-inline: 8px; }.room-identity { gap: 10px; }.room-row { grid-template-columns: minmax(0, 1fr) 103px; padding-inline: 8px; }.room-preview-panel { padding-inline: 10px; }.lobby-main { padding-bottom: 160px; }.room-preview-main { margin-bottom: 160px; } }
