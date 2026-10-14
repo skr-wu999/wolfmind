@@ -23,9 +23,10 @@
 .lobby-page .lobby-resume { display: flex; align-items: center; gap: 14px; margin: 0; padding: 8px 8px 8px 16px; font-size: .875rem; font-weight: 700; }
 .lobby-page .lobby-resume .px-button { min-height: 44px; padding: 0 16px; font-size: .875rem; }
 
-.lobby-board { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: start; gap: 22px; }
+.lobby-board { --card-pad: 20px 22px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: stretch; gap: 22px; }
 
-.lobby-page .room-list-panel { min-width: 0; padding: 20px 22px 12px; }
+.lobby-page .room-list-panel { display: flex; flex-direction: column; min-width: 0; padding: var(--card-pad); }
+.lobby-page .room-table { flex: 1; }
 .lobby-page .list-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
 .lobby-page .list-heading h2,
 .lobby-page .action-card-heading h2 { margin: 0 0 4px; color: var(--ink); font-size: 1.375rem; font-weight: 800; line-height: 1.3; letter-spacing: .04em; }
@@ -129,9 +130,9 @@
 .lobby-page .room-pagination span { font-family: 'Pixelify Sans', monospace; }
 .lobby-page .room-pagination button:disabled { color: #9a8f7c; }
 
-.lobby-page .lobby-actions { display: grid; grid-template-columns: 1fr; gap: 22px; }
+.lobby-page .lobby-actions { display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr auto; gap: 22px; }
 .lobby-page .create-room-panel,
-.lobby-page .join-room-panel { display: flex; flex-direction: column; padding: 18px 20px 20px; }
+.lobby-page .join-room-panel { display: flex; flex-direction: column; padding: var(--card-pad); }
 .lobby-page .action-card-heading { display: flex; align-items: flex-start; gap: 12px; margin: 0; }
 .action-icon {
   display: grid;
@@ -144,7 +145,7 @@
   background: var(--ink);
   box-shadow: inset 0 calc(-1 * var(--px)) 0 0 #00000059;
 }
-.create-lineup { margin: 16px 0; padding: 12px 10px 10px; background: #ebdfc2; box-shadow: inset 0 0 0 var(--px) var(--paper-lo); }
+.create-lineup { flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 16px 0; padding: 12px 10px 10px; background: #ebdfc2; box-shadow: inset 0 0 0 var(--px) var(--paper-lo); }
 .create-lineup ul { display: flex; justify-content: space-around; margin: 0; padding: 0; list-style: none; }
 .create-lineup p { display: grid; gap: 2px; margin: 10px 0 0; color: var(--muted); font-size: .75rem; font-weight: 600; line-height: 1.5; text-align: center; }
 .create-lineup strong { color: var(--ink); font-size: .8125rem; }
@@ -178,7 +179,8 @@
 }
 .lobby-page .join-room-panel .px-button { width: 100%; }
 
-.lobby-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 2px; width: fit-content; max-width: 100%; margin-top: 26px; padding: 4px 8px; }
+.lobby-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px; margin-top: 22px; padding: 4px 12px 4px 22px; }
+.lobby-links-label { margin-right: 10px; color: var(--muted); font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
 .lobby-page .lobby-links .px-link { display: inline-flex; align-items: center; padding: 0 10px; color: var(--ink); font-size: .8125rem; text-decoration: none; text-shadow: none; }
 .lobby-page .lobby-links .px-link:hover { text-decoration: underline; text-decoration-thickness: var(--px); text-underline-offset: 6px; }
 .lobby-back { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
@@ -194,7 +196,7 @@
 
 @media (max-width: 1000px) {
   .lobby-board { grid-template-columns: 1fr; }
-  .lobby-page .lobby-actions { grid-template-columns: 1fr 1fr; }
+  .lobby-page .lobby-actions { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
 }
 @media (max-width: 760px) {
   .lobby-page .room-table-head { display: none; }
@@ -211,12 +213,11 @@
   .lobby-shell { width: calc(100% - 24px); padding: 4px 0 28px; }
   .lobby-intro { margin: 0 4px 20px; }
   .lobby-lead { font-size: .9375rem; }
-  .lobby-page .room-list-panel { padding: 16px 14px 10px; }
+  .lobby-board { --card-pad: 16px; }
+  .lobby-links { padding-left: 16px; }
   .lobby-page .room-filters { width: 100%; }
   .lobby-page .room-filters button { flex: 1; min-height: 44px; padding: 0 4px; font-size: .75rem; }
   .lobby-page .lobby-actions { grid-template-columns: 1fr; }
-  .lobby-page .create-room-panel,
-  .lobby-page .join-room-panel { padding: 16px; }
   .lobby-page .empty-rooms,
   .lobby-page .list-loading { min-height: 220px; }
 }

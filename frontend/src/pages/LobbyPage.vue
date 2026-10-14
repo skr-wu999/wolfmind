@@ -106,7 +106,7 @@ onBeforeUnmount(() => { active = false; clearInterval(refreshTimer); document.re
       <div class="lobby-board">
         <section class="px-panel room-list-panel" aria-labelledby="room-list-title" :aria-busy="loading">
           <div class="list-heading">
-            <div><h2 id="room-list-title">房间列表</h2><p>与真实玩家或 AI 一起，体验推理与表达的乐趣。</p></div>
+            <div class="action-card-heading"><span class="action-icon" aria-hidden="true"><PixelIcon name="people" :size="20" /></span><div><h2 id="room-list-title">房间列表</h2><p>与真实玩家或 AI 一起，体验推理与表达的乐趣。</p></div></div>
             <div class="room-filters" role="group" aria-label="筛选房间"><button v-for="item in filters" :key="item.value" :aria-pressed="filter === item.value" :class="{ selected: filter === item.value }" @click="filter = item.value">{{ item.label }}</button></div>
           </div>
 
@@ -133,7 +133,7 @@ onBeforeUnmount(() => { active = false; clearInterval(refreshTimer); document.re
           <section class="px-panel create-room-panel" aria-labelledby="create-room-title">
             <div class="action-card-heading"><span class="action-icon" aria-hidden="true"><PixelIcon name="plus" :size="20" /></span><div><h2 id="create-room-title">创建房间</h2><p>开一间新房，邀请好友一起游戏。</p></div></div>
             <div class="create-lineup">
-              <ul aria-hidden="true"><li v-for="role in lineup" :key="role"><PixelRole :role="role" :scale="3" /></li></ul>
+              <ul aria-hidden="true"><li v-for="role in lineup" :key="role"><PixelRole :role="role" :scale="4" /></li></ul>
               <p><strong>经典九人局</strong><span>3 狼人 · 3 村民 · 预言家 · 女巫 · 猎人</span></p>
             </div>
             <button class="px-button px-button-primary create-room-button" @click="openCreate"><PixelIcon name="plus" :size="18" />创建房间</button>
@@ -149,7 +149,7 @@ onBeforeUnmount(() => { active = false; clearInterval(refreshTimer); document.re
           </section>
         </aside>
       </div>
-      <nav class="lobby-links px-panel" aria-label="更多入口"><template v-if="!online"><RouterLink to="/games/demo" class="px-link">核心游戏页 · 本地演示</RouterLink><RouterLink to="/watch/demo" class="px-link">AI 对局观战</RouterLink><RouterLink to="/games/demo/replay" class="px-link">游戏回放</RouterLink><RouterLink to="/games/demo/analysis" class="px-link">AI 分析</RouterLink></template><RouterLink to="/lab" class="px-link">AI 实验室</RouterLink></nav>
+      <nav class="lobby-links px-panel" aria-label="更多入口"><span class="lobby-links-label" aria-hidden="true">更多入口</span><template v-if="!online"><RouterLink to="/games/demo" class="px-link">核心游戏页 · 本地演示</RouterLink><RouterLink to="/watch/demo" class="px-link">AI 对局观战</RouterLink><RouterLink to="/games/demo/replay" class="px-link">游戏回放</RouterLink><RouterLink to="/games/demo/analysis" class="px-link">AI 分析</RouterLink></template><RouterLink to="/lab" class="px-link">AI 实验室</RouterLink></nav>
     </main>
 
     <PixelDialog v-model:open="createOpen" title="为今晚的推理开一间房。" eyebrow="WOLFMIND / 创建房间">
