@@ -189,23 +189,25 @@ onBeforeUnmount(() => { active = false; generation++; window.removeEventListener
           <h1 class="lobby-title"><PixelTitle text="等待开局" :size="18" /></h1>
           <p class="lobby-lead">与玩家和 AI 集结完毕，准备进入今晚的推理。</p>
         </div>
-        <button class="px-button waiting-leave" :disabled="busy" @click="leave"><PixelIcon name="door" :size="18" />{{ busy ? '正在返回…' : mySeat ? '离开房间，返回大厅' : '返回游戏大厅' }}</button>
       </div>
       <div class="lobby-board waiting-board">
         <section class="px-panel waiting-panel" aria-label="房间座位与玩家" :aria-busy="loading">
           <p v-if="error && !seatOpen" class="lobby-error" role="alert">{{ error }} <button :disabled="loading || busy" @click="load()">重试</button></p>
           <p v-if="loading" class="waiting-load" role="status">正在读取房间…</p>
           <template v-if="room || loading">
+            <div class="waiting-panel-top">
+              <div class="action-card-heading waiting-room-heading"><span class="action-icon" aria-hidden="true"><PixelIcon name="tree" :size="20" /></span><div><div class="waiting-name-line"><h2>{{ room?.name || '村庄房间' }}</h2><span class="room-waiting-label"><i aria-hidden="true"></i>{{ room?.status === 'PLAYING' ? '已经开始' : '等待开始' }}</span></div><p>等待玩家准备，一起进入今晚的推理。</p></div></div>
+              <button class="px-button waiting-leave" :disabled="busy" @click="leave"><PixelIcon name="door" :size="16" />{{ busy ? '正在返回…' : mySeat ? '离开房间' : '返回大厅' }}</button>
+            </div>
             <div class="waiting-content">
               <div class="room-seating">
-                <div class="action-card-heading waiting-room-heading"><span class="action-icon" aria-hidden="true"><PixelIcon name="tree" :size="20" /></span><div><div class="waiting-name-line"><h2>{{ room?.name || '村庄房间' }}</h2><span class="room-waiting-label"><i aria-hidden="true"></i>{{ room?.status === 'PLAYING' ? '已经开始' : '等待开始' }}</span></div><p>等待玩家准备，一起进入今晚的推理。</p></div></div>
                 <section class="seat-layout-panel" aria-labelledby="seat-layout-title"><div class="seat-layout-heading"><h3 id="seat-layout-title"><PixelIcon name="people" :size="20" />座位布局</h3><span>{{ room?.occupied || 0 }} / 9</span><small>点击座位可查看详情</small></div><RoomSeatBoard :seats="seats" :owner-seat-no="room?.ownerSeatNo ?? null" :loading="loading && !room" @select="selectSeat" /></section>
               </div>
               <section class="waiting-player-panel" aria-labelledby="waiting-players-title"><div class="waiting-player-heading"><PixelIcon name="people" :size="20" /><h3 id="waiting-players-title">玩家列表</h3><span>{{ room?.occupied || 0 }} / 9</span></div><div class="waiting-player-table" role="table" aria-label="玩家与准备状态"><div class="waiting-player-columns" role="row"><span role="columnheader">玩家</span><span role="columnheader">身份</span><span role="columnheader">状态</span></div><div v-for="seat in seats" :key="seat.seatNo" class="waiting-player-row" role="row"><div role="cell"><button :aria-label="`查看${seat.seatNo}号座位详情`" :disabled="loading && !room" @click="selectSeat(seat.seatNo)"><PixelAvatar v-if="seat.name" :variant="seat.avatar" :size="23" /><span v-else class="empty-avatar" aria-hidden="true">+</span><span>{{ seat.name || '等待加入' }}</span><b v-if="seat.seatNo === room?.ownerSeatNo" class="player-owner">房主</b><small v-else-if="seat.isMe">你</small></button></div><span role="cell">{{ seat.name ? seat.controller === 'AI' ? 'AI' : '玩家' : '空缺' }}</span><span role="cell" class="player-ready-state" :class="{ 'is-ready': seat.ready }"><i v-if="seat.name" aria-hidden="true"></i>{{ seat.name ? seat.ready ? '已准备' : '未准备' : '空位' }}</span></div></div><div class="waiting-player-summary"><span>玩家 {{ (room?.occupied || 0) - aiCount }} · AI {{ aiCount }}</span><span>已准备 {{ readyCount }} / 9</span></div></section>
             </div>
             <div class="waiting-panel-footer"><span v-if="feedback" class="waiting-feedback" role="status">{{ feedback }}</span><span v-else-if="mySeat" class="seat-feedback" role="status">你已加入房间，坐在 {{ mySeat.seatNo }} 号座位。</span><span v-else>{{ !online ? '本地房间 · 点击空位加入' : live === 'ready' ? '在线房间 · 座位实时同步' : '在线房间 · 实时连接中，可手动刷新' }}</span><button :disabled="loading || busy" @click="load()"><PixelIcon name="refresh" :size="14" />刷新房间</button></div>
           </template>
-          <div v-else class="empty-rooms"><PixelIcon name="door" :size="36" /><h3>暂时无法打开房间</h3><p>检查房间号，或返回大厅选择其他房间。</p><button class="px-button" @click="leave">返回大厅</button></div>
+          <div v-else class="empty-rooms"><PixelIcon name="door" :size="36" /><h3>暂时无法打开房间</h3><p>检查房间号，或返回大厅选择其他房间。</p><button class="px-button waiting-leave" :disabled="busy" @click="leave">返回大厅</button></div>
         </section>
         <aside v-if="room" class="waiting-actions" aria-label="房间信息与设置">
           <section class="px-panel waiting-info-panel"><div class="action-card-heading"><span class="action-icon" aria-hidden="true"><PixelIcon name="document" :size="20" /></span><div><h2>房间信息</h2></div></div><dl class="waiting-info"><div><dt><PixelIcon name="people" :size="17" />房间名称</dt><dd>{{ room.name }}</dd></div><div><dt><PixelIcon name="gamepad" :size="17" />游戏模式</dt><dd>经典九人局</dd></div><div><dt><PixelIcon name="people" :size="17" />当前人数</dt><dd>{{ room.occupied }} / 9</dd></div><div><dt><PixelIcon name="tag" :size="17" />房间号</dt><dd>{{ room.roomId }}<PixelIcon name="copy" :size="15" /></dd></div></dl><button class="px-button waiting-copy" @click="copyCode"><PixelIcon name="key" :size="17" />复制房间号</button><p v-if="copied" class="copy-feedback" role="status">{{ copied }}</p></section>
